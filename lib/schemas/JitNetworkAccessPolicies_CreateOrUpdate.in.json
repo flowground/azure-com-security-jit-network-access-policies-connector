@@ -1,0 +1,291 @@
+{
+    "type": "object",
+    "properties": {
+        "subscriptionId": {
+            "required": true,
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$"
+        },
+        "resourceGroupName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 90,
+            "pattern": "^[-\\w\\._\\(\\)]+$"
+        },
+        "ascLocation": {
+            "required": true,
+            "type": "string"
+        },
+        "jitNetworkAccessPolicyName": {
+            "required": true,
+            "type": "string"
+        },
+        "requestBody": {
+            "allOf": [
+                {
+                    "description": "Describes an Azure resource.",
+                    "properties": {
+                        "id": {
+                            "description": "Resource Id",
+                            "readOnly": true,
+                            "type": "string"
+                        },
+                        "name": {
+                            "description": "Resource name",
+                            "readOnly": true,
+                            "type": "string"
+                        },
+                        "type": {
+                            "description": "Resource type",
+                            "readOnly": true,
+                            "type": "string"
+                        }
+                    },
+                    "type": "object",
+                    "x-ms-azure-resource": true
+                },
+                {
+                    "description": "Describes an Azure resource with kind",
+                    "properties": {
+                        "kind": {
+                            "description": "Kind of the resource",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                {
+                    "description": "Describes an Azure resource with location",
+                    "properties": {
+                        "location": {
+                            "description": "Location where the resource is stored",
+                            "readOnly": true,
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            ],
+            "properties": {
+                "properties": {
+                    "x-ms-client-flatten": true,
+                    "properties": {
+                        "provisioningState": {
+                            "description": "Gets the provisioning state of the Just-in-Time policy.",
+                            "readOnly": true,
+                            "type": "string"
+                        },
+                        "requests": {
+                            "items": {
+                                "properties": {
+                                    "requestor": {
+                                        "description": "The identity of the person who made the request",
+                                        "type": "string"
+                                    },
+                                    "startTimeUtc": {
+                                        "description": "The start time of the request in UTC",
+                                        "format": "date-time",
+                                        "type": "string"
+                                    },
+                                    "virtualMachines": {
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Resource ID of the virtual machine that is linked to this policy",
+                                                    "type": "string"
+                                                },
+                                                "ports": {
+                                                    "description": "The ports that were opened for the virtual machine",
+                                                    "items": {
+                                                        "properties": {
+                                                            "allowedSourceAddressPrefix": {
+                                                                "description": "Mutually exclusive with the \"allowedSourceAddressPrefixes\" parameter. Should be an IP address or CIDR, for example \"192.168.0.3\" or \"192.168.0.0/16\".",
+                                                                "type": "string"
+                                                            },
+                                                            "allowedSourceAddressPrefixes": {
+                                                                "description": "Mutually exclusive with the \"allowedSourceAddressPrefix\" parameter.",
+                                                                "items": {
+                                                                    "description": "IP address or CIDR, for example \"192.168.0.3\" or \"192.168.0.0/16\".",
+                                                                    "type": "string"
+                                                                },
+                                                                "type": "array"
+                                                            },
+                                                            "endTimeUtc": {
+                                                                "description": "The date & time at which the request ends in UTC",
+                                                                "format": "date-time",
+                                                                "type": "string"
+                                                            },
+                                                            "number": {
+                                                                "maximum": 65535,
+                                                                "minimum": 0,
+                                                                "type": "integer"
+                                                            },
+                                                            "status": {
+                                                                "description": "The status of the port",
+                                                                "enum": [
+                                                                    "Revoked",
+                                                                    "Initiated"
+                                                                ],
+                                                                "type": "string",
+                                                                "x-ms-enum": {
+                                                                    "modelAsString": true,
+                                                                    "name": "status",
+                                                                    "values": [
+                                                                        {
+                                                                            "value": "Revoked"
+                                                                        },
+                                                                        {
+                                                                            "value": "Initiated"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "statusReason": {
+                                                                "description": "A description of why the `status` has its value",
+                                                                "enum": [
+                                                                    "Expired",
+                                                                    "UserRequested",
+                                                                    "NewerRequestInitiated"
+                                                                ],
+                                                                "type": "string",
+                                                                "x-ms-enum": {
+                                                                    "modelAsString": true,
+                                                                    "name": "statusReason",
+                                                                    "values": [
+                                                                        {
+                                                                            "value": "Expired"
+                                                                        },
+                                                                        {
+                                                                            "value": "UserRequested"
+                                                                        },
+                                                                        {
+                                                                            "value": "NewerRequestInitiated"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "endTimeUtc",
+                                                            "number",
+                                                            "status",
+                                                            "statusReason"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "required": [
+                                                "id",
+                                                "ports"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "requestor",
+                                    "startTimeUtc",
+                                    "virtualMachines"
+                                ],
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "virtualMachines": {
+                            "description": "Configurations for Microsoft.Compute/virtualMachines resource type.",
+                            "items": {
+                                "properties": {
+                                    "id": {
+                                        "description": "Resource ID of the virtual machine that is linked to this policy",
+                                        "type": "string"
+                                    },
+                                    "ports": {
+                                        "description": "Port configurations for the virtual machine",
+                                        "items": {
+                                            "properties": {
+                                                "allowedSourceAddressPrefix": {
+                                                    "description": "Mutually exclusive with the \"allowedSourceAddressPrefixes\" parameter. Should be an IP address or CIDR, for example \"192.168.0.3\" or \"192.168.0.0/16\".",
+                                                    "type": "string"
+                                                },
+                                                "allowedSourceAddressPrefixes": {
+                                                    "description": "Mutually exclusive with the \"allowedSourceAddressPrefix\" parameter.",
+                                                    "items": {
+                                                        "description": "IP address or CIDR, for example \"192.168.0.3\" or \"192.168.0.0/16\".",
+                                                        "type": "string"
+                                                    },
+                                                    "type": "array"
+                                                },
+                                                "maxRequestAccessDuration": {
+                                                    "description": "Maximum duration requests can be made for. In ISO 8601 duration format. Minimum 5 minutes, maximum 1 day",
+                                                    "type": "string"
+                                                },
+                                                "number": {
+                                                    "maximum": 65535,
+                                                    "minimum": 0,
+                                                    "type": "integer"
+                                                },
+                                                "protocol": {
+                                                    "enum": [
+                                                        "TCP",
+                                                        "UDP",
+                                                        "*"
+                                                    ],
+                                                    "type": "string",
+                                                    "x-ms-enum": {
+                                                        "modelAsString": true,
+                                                        "name": "protocol",
+                                                        "values": [
+                                                            {
+                                                                "value": "TCP"
+                                                            },
+                                                            {
+                                                                "value": "UDP"
+                                                            },
+                                                            {
+                                                                "name": "All",
+                                                                "value": "*"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "maxRequestAccessDuration",
+                                                "number",
+                                                "protocol"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "ports"
+                                ],
+                                "type": "object"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "virtualMachines"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "properties"
+            ],
+            "type": "object"
+        },
+        "api_version": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}

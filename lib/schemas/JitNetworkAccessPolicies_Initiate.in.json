@@ -1,0 +1,88 @@
+{
+    "type": "object",
+    "properties": {
+        "subscriptionId": {
+            "required": true,
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$"
+        },
+        "resourceGroupName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 90,
+            "pattern": "^[-\\w\\._\\(\\)]+$"
+        },
+        "ascLocation": {
+            "required": true,
+            "type": "string"
+        },
+        "jitNetworkAccessPolicyName": {
+            "required": true,
+            "type": "string"
+        },
+        "jitNetworkAccessPolicyInitiateType": {
+            "required": true,
+            "type": "string",
+            "enum": [
+                "initiate"
+            ]
+        },
+        "requestBody": {
+            "properties": {
+                "virtualMachines": {
+                    "description": "A list of virtual machines & ports to open access for",
+                    "items": {
+                        "properties": {
+                            "id": {
+                                "description": "Resource ID of the virtual machine that is linked to this policy",
+                                "type": "string"
+                            },
+                            "ports": {
+                                "description": "The ports to open for the resource with the `id`",
+                                "items": {
+                                    "properties": {
+                                        "allowedSourceAddressPrefix": {
+                                            "description": "Source of the allowed traffic. If omitted, the request will be for the source IP address of the initiate request.",
+                                            "type": "string"
+                                        },
+                                        "endTimeUtc": {
+                                            "description": "The time to close the request in UTC",
+                                            "format": "date-time",
+                                            "type": "string"
+                                        },
+                                        "number": {
+                                            "maximum": 65535,
+                                            "minimum": 0,
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "endTimeUtc",
+                                        "number"
+                                    ],
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "ports"
+                        ],
+                        "type": "object"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "virtualMachines"
+            ],
+            "type": "object"
+        },
+        "api_version": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}
